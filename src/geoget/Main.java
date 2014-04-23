@@ -1,11 +1,11 @@
 package geoget;
 
 import geoget.lib.YandexGeoApiRequest;
-import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -25,19 +25,19 @@ public class Main {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			BufferedReader in = new BufferedReader(
 				new InputStreamReader(conn.getInputStream()));
-			String inputline;
-			StringBuffer json = new StringBuffer();
-			while ((inputline = in.readLine()) != null) {
-				json.append(inputline);
+			String inputLine;
+			StringBuilder json = new StringBuilder();
+			while ((inputLine = in.readLine()) != null) {
+				json.append(inputLine);
 			}
 			JSONArray data;
 			JSONObject jsonParsed =	(JSONObject) parser.parse(json.toString());
 			jsonParsed = (JSONObject) jsonParsed.get("response");
 			jsonParsed = (JSONObject) jsonParsed.get("GeoObjectCollection");
 			data = (JSONArray) jsonParsed.get("featureMember");
-			ArrayList<String> names = new ArrayList<String>(); 
+			ArrayList<String> names = new ArrayList<String>();
+			ArrayList<double[]> pos = new ArrayList<double[]>();
 			for (Object obj: data){
-				int i=0;
 				jsonParsed = (JSONObject) obj;
 				jsonParsed = (JSONObject) jsonParsed.get("GeoObject");
 				JSONObject point = (JSONObject) jsonParsed.get("Point");
@@ -45,19 +45,19 @@ public class Main {
 				jsonParsed = (JSONObject) jsonParsed.get("GeocoderMetaData");
 				jsonParsed = (JSONObject) jsonParsed.get("AddressDetails");
 				jsonParsed = (JSONObject) jsonParsed.get("Country");
-				jsonParsed = (JSONObject) jsonParsed.get("AdressLine");				
-				
-				names[i] = jsonParsed.toString();
-				
-				
-				
-				i++;
+                names.add((String) jsonParsed.get("AddressLine"));
+                String[] position = ((String) point.get("pos")).split(" ");
+
+                pos.add(new double[] {Double.parseDouble(position[0]), Double.parseDouble(position[1])});
+
 			}
+            System.out.println(names + " " + pos);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-			
+
 		
 	}
 }
+
