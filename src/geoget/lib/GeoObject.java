@@ -10,4 +10,8 @@ public class GeoObject {
         this.lat = lat;
         this.lon = lon;
     }
+
+    public String toString() {
+        return String.format("GeoObject(%s %f %f)", name, lat, lon);
+    }
 }
