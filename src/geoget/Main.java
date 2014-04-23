@@ -18,7 +18,7 @@ public class Main {
 		double lon=37.619559, lat=55.739789;
 		req = new YandexGeoApiRequest(lon, lat);
 		JSONParser parser = new JSONParser();
-		
+	
 		
 		try {
 			URL url = new URL(req.getRequest());
@@ -35,9 +35,9 @@ public class Main {
 			jsonParsed = (JSONObject) jsonParsed.get("response");
 			jsonParsed = (JSONObject) jsonParsed.get("GeoObjectCollection");
 			data = (JSONArray) jsonParsed.get("featureMember");
-			
-			
+			ArrayList<String> names = new ArrayList<String>(); 
 			for (Object obj: data){
+				int i=0;
 				jsonParsed = (JSONObject) obj;
 				jsonParsed = (JSONObject) jsonParsed.get("GeoObject");
 				JSONObject point = (JSONObject) jsonParsed.get("Point");
@@ -45,8 +45,13 @@ public class Main {
 				jsonParsed = (JSONObject) jsonParsed.get("GeocoderMetaData");
 				jsonParsed = (JSONObject) jsonParsed.get("AddressDetails");
 				jsonParsed = (JSONObject) jsonParsed.get("Country");
-				System.out.println(jsonParsed.get("AddressLine") + "\t" + point.get("pos"));
+				jsonParsed = (JSONObject) jsonParsed.get("AdressLine");				
 				
+				names[i] = jsonParsed.toString();
+				
+				
+				
+				i++;
 			}
 		}
 		catch (Exception e) {
