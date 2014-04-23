@@ -1,5 +1,6 @@
 package geoget;
 
+import geoget.lib.GeoObject;
 import geoget.lib.YandexGeoApiRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -35,8 +36,7 @@ public class Main {
 			jsonParsed = (JSONObject) jsonParsed.get("response");
 			jsonParsed = (JSONObject) jsonParsed.get("GeoObjectCollection");
 			data = (JSONArray) jsonParsed.get("featureMember");
-			ArrayList<String> names = new ArrayList<String>();
-			ArrayList<double[]> pos = new ArrayList<double[]>();
+			ArrayList<GeoObject> geoObjects = new ArrayList<GeoObject>();
 			for (Object obj: data){
 				jsonParsed = (JSONObject) obj;
 				jsonParsed = (JSONObject) jsonParsed.get("GeoObject");
@@ -45,14 +45,18 @@ public class Main {
 				jsonParsed = (JSONObject) jsonParsed.get("GeocoderMetaData");
 				jsonParsed = (JSONObject) jsonParsed.get("AddressDetails");
 				jsonParsed = (JSONObject) jsonParsed.get("Country");
-                names.add((String) jsonParsed.get("AddressLine"));
                 String[] position = ((String) point.get("pos")).split(" ");
 
-                pos.add(new double[] {Double.parseDouble(position[0]), Double.parseDouble(position[1])});
+
+                geoObjects.add(new GeoObject(
+                    (String)jsonParsed.get("AddressLine"),
+                    Double.parseDouble(position[0]),
+                    Double.parseDouble(position[1])
+                ));
 
 			}
-            System.out.println(names + " " + pos);
-		}
+            System.out.println(geoObjects);
+        }
 		catch (Exception e) {
 			e.printStackTrace();
 		}
