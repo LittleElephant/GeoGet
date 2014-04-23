@@ -19,7 +19,7 @@ public class Main {
 		double lon=37.619559, lat=55.739789;
 		req = new YandexGeoApiRequest(lon, lat);
 		JSONParser parser = new JSONParser();
-	
+	    GeoObject center = new GeoObject("Centeer", lon, lat);
 		
 		try {
 			URL url = new URL(req.getRequest());
@@ -47,15 +47,21 @@ public class Main {
 				jsonParsed = (JSONObject) jsonParsed.get("Country");
                 String[] position = ((String) point.get("pos")).split(" ");
 
+                GeoObject current = new GeoObject(
+                        (String)jsonParsed.get("AddressLine"),
+                        Double.parseDouble(position[0]),
+                        Double.parseDouble(position[1])
+                );
+                geoObjects.add(current);
+                System.out.println(
+                        String.format(
+                                "%s %.0fм",
+                                current.name,
+                                GeoObject.convertToMeters(center.distance(current))
+                        )
+                );
 
-                geoObjects.add(new GeoObject(
-                    (String)jsonParsed.get("AddressLine"),
-                    Double.parseDouble(position[0]),
-                    Double.parseDouble(position[1])
-                ));
-
-			}
-            System.out.println(geoObjects);
+            }
         }
 		catch (Exception e) {
 			e.printStackTrace();
