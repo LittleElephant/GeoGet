@@ -19,7 +19,7 @@ public class Main {
 		double lon=37.619559, lat=55.739789;
 		req = new YandexGeoApiRequest(lon, lat);
 		JSONParser parser = new JSONParser();
-	    GeoObject center = new GeoObject("Centeer", lon, lat);
+	    GeoObject center = new GeoObject("Center", lon, lat);
 		
 		try {
 			URL url = new URL(req.getRequest());
@@ -55,9 +55,9 @@ public class Main {
                 geoObjects.add(current);
                 System.out.println(
                         String.format(
-                                "%s %.0fм",
+                                "%s\t%.0fм",
                                 current.name,
-                                GeoObject.convertToMeters(center.distance(current))
+                                center.distance(current)
                         )
                 );
 
