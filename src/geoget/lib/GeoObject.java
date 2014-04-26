@@ -16,10 +16,17 @@ public class GeoObject {
     }
 
     public double distance(GeoObject other) {
-        return Math.sqrt(Math.pow(this.lat - other.lat, 2) + Math.pow(this.lon - other.lon, 2));
-    }
-
-    public static double convertToMeters(double grads) {
-        return grads * 111 * 1000;
+        double
+            thisLatRad = Math.toRadians(this.lat),
+            thisLonRad = Math.toRadians(this.lon),
+            otherLatRad = Math.toRadians(other.lat),
+            otherLonRad = Math.toRadians(other.lon);
+        final int earthRadius = 6372795;
+        return earthRadius * (
+            2 * Math.asin(Math.sqrt(
+                Math.pow((Math.sin(thisLatRad - otherLatRad) / 2), 2) +
+                Math.cos(thisLatRad) * Math.cos(otherLatRad) * Math.pow((Math.sin((thisLonRad - otherLonRad) / 2)), 2)
+            ))
+        );
     }
 }
