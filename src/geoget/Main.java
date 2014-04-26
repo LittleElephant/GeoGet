@@ -1,47 +1,14 @@
 package geoget;
 
-import geoget.lib.GeoObject;
-import geoget.lib.YandexGeoApiRequest;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import geoget.lib.GeoObjectCollection;
 
 public class Main {
 
 	public static void main(String[] args) {
-		YandexGeoApiRequest req;
-		double lon=37.619559, lat=55.739789;
-		req = new YandexGeoApiRequest(lon, lat);
-        JSONObject jsonParsed = req.getJson();
-        GeoObject center = new GeoObject("Center",lon,lat);
+	    GeoObjectCollection center = new GeoObjectCollection();
 
+        System.out.println(center.getElements());
 
-        JSONArray data;
-			jsonParsed = (JSONObject) jsonParsed.get("response");
-			jsonParsed = (JSONObject) jsonParsed.get("GeoObjectCollection");
-			data = (JSONArray) jsonParsed.get("featureMember");
-			for (Object obj: data){
-            jsonParsed = (JSONObject) obj;
-            jsonParsed = (JSONObject) jsonParsed.get("GeoObject");
-            JSONObject point = (JSONObject) jsonParsed.get("Point");
-            jsonParsed = (JSONObject) jsonParsed.get("metaDataProperty");
-            jsonParsed = (JSONObject) jsonParsed.get("GeocoderMetaData");
-            jsonParsed = (JSONObject) jsonParsed.get("AddressDetails");
-            jsonParsed = (JSONObject) jsonParsed.get("Country");
-            String[] position = ((String) point.get("pos")).split(" ");
-
-            GeoObject current = new GeoObject(
-                    (String)jsonParsed.get("AddressLine"),
-                    Double.parseDouble(position[0]),
-                    Double.parseDouble(position[1])
-            );
-            System.out.println(
-                    String.format(
-                            "%s\t%.0fм",
-                            current.name,
-                            center.distance(current)
-                    )
-            );
-        }
     }
 }
 
