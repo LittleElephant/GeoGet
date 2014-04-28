@@ -12,11 +12,10 @@ import java.util.Locale;
 public class YandexGeoApiRequest {
     private String request;
 	
-	public YandexGeoApiRequest(double lon, double lat) {
-        String baseformat = "http://geocode-maps.yandex.ru/1.x/?format=json&kind=house&spn=0.003,0.003&results=1000&geocode=%.6f,%.6f";
-        request = String.format(Locale.US, baseformat, lon, lat);
+	public YandexGeoApiRequest(double lon, double lat, double spn) {
+        String baseformat = "http://geocode-maps.yandex.ru/1.x/?format=json&kind=house&spn=%.4f,%.4f&results=1000&geocode=%.6f,%.6f";
+        request = String.format(Locale.US, baseformat,spn, spn, lon, lat);
     }
-
     public JSONObject getJson() {
         JSONParser parser = new JSONParser();
 

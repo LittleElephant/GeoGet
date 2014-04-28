@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public class GeoObjectElements {
 
-    ArrayList<GeoObject> elements = new ArrayList<GeoObject>();
+    public ArrayList<GeoObject> elements = new ArrayList<GeoObject>();
 
-    public ArrayList<GeoObject> getElements(double lon, double lat) {
+    public int getElements(double lon, double lat, double spn) {
         YandexGeoApiRequest req;
-        req = new YandexGeoApiRequest(lon, lat);
+        req = new YandexGeoApiRequest(lon, lat, spn);
         JSONObject jsonParsed = req.getJson();
         //GeoObject center = new GeoObject("Center", lon, lat);
-
+        int count = 0;
         JSONArray data;
         jsonParsed = (JSONObject) jsonParsed.get("response");
         jsonParsed = (JSONObject) jsonParsed.get("GeoObjectCollection");
@@ -27,15 +27,27 @@ public class GeoObjectElements {
             jsonParsed = (JSONObject) jsonParsed.get("AddressDetails");
             jsonParsed = (JSONObject) jsonParsed.get("Country");
             String[] position = ((String) point.get("pos")).split(" ");
+            String name = (String) jsonParsed.get("AddressLine");
+            if (!this.contains(name)){
+                GeoObject current = new GeoObject(
+                        name,
+                        Double.parseDouble(position[0]),
+                        Double.parseDouble(position[1])
+                );
+                elements.add(current);
+            }
 
-            GeoObject current = new GeoObject(
-                    (String) jsonParsed.get("AddressLine"),
-                    Double.parseDouble(position[0]),
-                    Double.parseDouble(position[1])
-            );
-            elements.add(current);
+            count++;
         }
-     return elements;
+        return count;
+    }
+
+    private boolean contains(String name) {
+        for (GeoObject o: elements){
+            if (o.name.equals(name))
+                return true;
+        }
+        return false;
     }
  }
 
