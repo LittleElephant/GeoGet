@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class YandexGeoApiRequest {
@@ -36,5 +37,30 @@ public class YandexGeoApiRequest {
             e.printStackTrace();
         }
         return jsonParsed;
+    }
+
+    public static ArrayList<YandexGeoApiRequest> getSplittedRequests(double lon, double lat, double spn) {
+        ArrayList<YandexGeoApiRequest> requests = new ArrayList<YandexGeoApiRequest>();
+        int [][] offsets = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+        YandexGeoApiRequest request = new YandexGeoApiRequest(lon, lat, spn);
+        if (YandexGeoApiRequest.getFoundCount(request.getJson()) >= 100) {
+            for (int[] offset: offsets) {
+                requests.addAll(getSplittedRequests(
+                    lon + offset[0] * spn / 2, lat + offset[1] * spn / 2, spn / 2
+                ));
+            }
+        }
+        return requests;
+    }
+
+    private static int getFoundCount(JSONObject parsedResponse) {
+        return Integer.parseInt(
+            (String) ((JSONObject) ((JSONObject) ((JSONObject) ((JSONObject)
+            parsedResponse
+            .get("response"))
+            .get("GeoObjectCollection"))
+            .get("metaDataProperty"))
+            .get("GeocoderMetaData"))
+            .get("found"));
     }
 }
