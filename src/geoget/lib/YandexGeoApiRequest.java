@@ -50,6 +50,9 @@ public class YandexGeoApiRequest {
                 ));
             }
         }
+        else {
+            requests.add(new YandexGeoApiRequest(lon, lat, spn));
+        }
         return requests;
     }
 
