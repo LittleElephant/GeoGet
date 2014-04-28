@@ -1,11 +1,7 @@
 package geoget;
 
-import com.sun.javafx.binding.StringFormatter;
 import geoget.lib.GeoObject;
 import geoget.lib.GeoObjectCollection;
-import geoget.lib.GeoObjectElements;
-
-import java.util.Locale;
 
 public class Main {
 
