@@ -8,12 +8,13 @@ import java.util.ArrayList;
 public class GeoObjectCollection {
     public ArrayList<GeoObject> objects = new ArrayList<GeoObject>();
 
-    public int getElements(double lon, double lat, double spn) {
-        YandexGeoApiRequest req;
-        req = new YandexGeoApiRequest(lon, lat, spn);
+    public void updateElements(double lon, double lat, double spn) {
+        for (YandexGeoApiRequest req: YandexGeoApiRequest.getSplittedRequests(lon, lat, spn))
+            this.updateElementsFromRequest(req);
+    }
+
+    public void updateElementsFromRequest(YandexGeoApiRequest req) {
         JSONObject jsonParsed = req.getJson();
-        //GeoObject center = new GeoObject("Center", lon, lat);
-        int count = 0;
         JSONArray data;
         jsonParsed = (JSONObject) jsonParsed.get("response");
         jsonParsed = (JSONObject) jsonParsed.get("GeoObjectCollection");
@@ -33,25 +34,7 @@ public class GeoObjectCollection {
                 );
                 objects.add(current);
             }
-
-            count++;
         }
-        return count;
-    }
-
-    public ArrayList<GeoObject> centers(double lon, double lat, double spn) {
-        int[][] points = {
-            {-1, -1}, {1, -1},
-            {1, -1}, {1, 1}
-        };
-
-        for (int[] center : points) {
-            int added = this.getElements(lon + spn * center[0], lat + spn * center[1], spn);
-            if (added >= 100) {
-                centers(lon + spn * center[0] / 2, lat + spn * center[1] / 2, spn / 2);
-            }
-        }
-        return objects;
     }
 
     private boolean contains(String name) {

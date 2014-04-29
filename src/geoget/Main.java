@@ -10,7 +10,9 @@ public class Main {
         GeoObjectCollection collection = new GeoObjectCollection();
         GeoObject center = new GeoObject("Center", lon, lat);
 
-        for (GeoObject current: collection.centers(lon, lat, spn)){
+        collection.updateElements(lon, lat, spn);
+
+        for (GeoObject current: collection.objects){
             System.out.println(String.format("%s\t%04.0fм", current.name, current.distance(center)));
         }
     }
