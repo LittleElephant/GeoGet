@@ -63,7 +63,7 @@ public class YandexGeoApiRequest {
             .get("response"))
             .get("GeoObjectCollection"))
             .get("metaDataProperty"))
-            .get("GeocoderMetaData"))
+            .get("GeocoderResponseMetaData"))
             .get("found"));
     }
 }
