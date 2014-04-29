@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -11,14 +12,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class YandexGeoApiRequest {
-    private String request;
+    public String request;
 	
 	public YandexGeoApiRequest(double lon, double lat, double spn) {
         String baseFormat = "http://geocode-maps.yandex.ru/1.x/?format=json&kind=house&spn=%.4f,%.4f&results=1000&geocode=%.6f,%.6f";
         request = String.format(Locale.US, baseFormat,spn, spn, lon, lat);
     }
 
-    public JSONObject getJson() {
+    public JSONObject getJson() throws IOException {
         JSONParser parser = new JSONParser();
 
         JSONObject jsonParsed = new JSONObject();
@@ -33,7 +34,11 @@ public class YandexGeoApiRequest {
                 json.append(inputLine);
             }
             jsonParsed = (JSONObject) parser.parse(json.toString());
-        } catch (Exception e) {
+        }
+        catch (IOException e) {
+            throw e;
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         return jsonParsed;
@@ -43,7 +48,14 @@ public class YandexGeoApiRequest {
         ArrayList<YandexGeoApiRequest> requests = new ArrayList<YandexGeoApiRequest>();
         int [][] offsets = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
         YandexGeoApiRequest request = new YandexGeoApiRequest(lon, lat, spn);
-        if (YandexGeoApiRequest.getFoundCount(request.getJson()) >= 100) {
+        int found;
+        try {
+            found = YandexGeoApiRequest.getFoundCount(request.getJson());
+        }
+        catch (IOException err) {
+            found = 100;
+        }
+        if (found >= 100) {
             for (int[] offset: offsets) {
                 requests.addAll(getSplittedRequests(
                     lon + offset[0] * spn / 2, lat + offset[1] * spn / 2, spn / 2

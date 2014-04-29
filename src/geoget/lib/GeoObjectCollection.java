@@ -3,17 +3,18 @@ package geoget.lib;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GeoObjectCollection {
     public ArrayList<GeoObject> objects = new ArrayList<GeoObject>();
 
-    public void updateElements(double lon, double lat, double spn) {
+    public void updateElements(double lon, double lat, double spn) throws IOException {
         for (YandexGeoApiRequest req: YandexGeoApiRequest.getSplittedRequests(lon, lat, spn))
             this.updateElementsFromRequest(req);
     }
 
-    public void updateElementsFromRequest(YandexGeoApiRequest req) {
+    public void updateElementsFromRequest(YandexGeoApiRequest req) throws IOException {
         JSONObject jsonParsed = req.getJson();
         JSONArray data;
         jsonParsed = (JSONObject) jsonParsed.get("response");
