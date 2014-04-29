@@ -18,21 +18,18 @@ public class GeoObjectCollection {
         jsonParsed = (JSONObject) jsonParsed.get("response");
         jsonParsed = (JSONObject) jsonParsed.get("GeoObjectCollection");
         data = (JSONArray) jsonParsed.get("featureMember");
+
         for (Object obj : data) {
-            jsonParsed = (JSONObject) obj;
-            jsonParsed = (JSONObject) jsonParsed.get("GeoObject");
-            JSONObject point = (JSONObject) jsonParsed.get("Point");
-            jsonParsed = (JSONObject) jsonParsed.get("metaDataProperty");
-            jsonParsed = (JSONObject) jsonParsed.get("GeocoderMetaData");
-            jsonParsed = (JSONObject) jsonParsed.get("AddressDetails");
-            jsonParsed = (JSONObject) jsonParsed.get("Country");
-            String[] position = ((String) point.get("pos")).split(" ");
-            String name = (String) jsonParsed.get("AddressLine");
-            if (!this.contains(name)){
+            String objAddress, objLon, objLat;
+            String[] extractedData = GeoObjectCollection.extractDataFromJson((JSONObject) obj);
+            objAddress = extractedData[0];
+            objLon = extractedData[1];
+            objLat = extractedData[2];
+            if (!this.contains(objAddress)){
                 GeoObject current = new GeoObject(
-                    name,
-                    Double.parseDouble(position[0]),
-                    Double.parseDouble(position[1])
+                    objAddress,
+                    Double.parseDouble(objLon),
+                    Double.parseDouble(objLat)
                 );
                 objects.add(current);
             }
@@ -40,14 +37,6 @@ public class GeoObjectCollection {
             count++;
         }
         return count;
-    }
-
-    private boolean contains(String name) {
-        for (GeoObject o: objects){
-            if (o.name.equals(name))
-                return true;
-        }
-        return false;
     }
 
     public ArrayList<GeoObject> centers(double lon, double lat, double spn) {
@@ -63,5 +52,29 @@ public class GeoObjectCollection {
             }
         }
         return objects;
+    }
+
+    private boolean contains(String name) {
+        for (GeoObject o: objects){
+            if (o.name.equals(name))
+                return true;
+        }
+        return false;
+    }
+
+    private static String[] extractDataFromJson(JSONObject data) {
+        String addressLine;
+        String[] position;
+        data = (JSONObject) data.get("GeoObject");
+        addressLine = (String) ((JSONObject) ((JSONObject) ((JSONObject) ((JSONObject)
+                data
+                .get("metaDataProperty"))
+                .get("GeocoderMetaData"))
+                .get("AddressDetails"))
+                .get("Country"))
+                .get("AddressLine");
+
+        position= ((String) ((JSONObject) data.get("Point")).get("pos")).split(" ");
+        return new String[] {addressLine, position[0], position[1]};
     }
 }
