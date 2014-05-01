@@ -46,7 +46,7 @@ public class YandexGeoApiRequest {
         if (YandexGeoApiRequest.getFoundCount(request.getJson()) >= 100) {
             for (int[] offset: offsets) {
                 requests.addAll(getSplittedRequests(
-                    lon + offset[0] * spn / 2, lat + offset[1] * spn / 2, spn / 2
+                    lon + offset[0] * spn / 4, lat + offset[1] * spn / 4, spn / 2
                 ));
             }
         }
