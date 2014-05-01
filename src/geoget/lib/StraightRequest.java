@@ -13,12 +13,12 @@ import java.util.Locale;
 
 public class StraightRequest {
     public String request;
-    public String[] lonlat;
+    public String[] position;
 
     public StraightRequest(String req) throws IOException {
         String baseFormat = "http://geocode-maps.yandex.ru/1.x/?format=json&geocode=%s";
         request = String.format(Locale.US, baseFormat, req);
-        lonlat = getPosition(getJson());
+        position = getPosition(getJson());
     }
 
     public JSONObject getJson() throws IOException {

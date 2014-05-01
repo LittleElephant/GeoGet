@@ -12,8 +12,8 @@ public class Main {
         double spn = 0.015;
         String address = "Бульвар матроса железнякак 21";
         StraightRequest sr = new StraightRequest(address);
-        double lon = Double.parseDouble(sr.lonlat[0]);
-        double lat = Double.parseDouble(sr.lonlat[1]);
+        double lon = Double.parseDouble(sr.position[0]);
+        double lat = Double.parseDouble(sr.position[1]);
         GeoObjectCollection collection = new GeoObjectCollection();
         GeoObject center = new GeoObject("Center", lon, lat);
         collection.updateElements(lon, lat, spn);
