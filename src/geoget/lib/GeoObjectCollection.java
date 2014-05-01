@@ -15,7 +15,7 @@ public class GeoObjectCollection {
     }
 
     public void updateElementsFromRequest(YandexGeoApiRequest req) throws IOException {
-        JSONObject jsonParsed = req.getJson();
+        JSONObject jsonParsed = req.getJsonFromRequest();
         JSONArray data;
         jsonParsed = (JSONObject) jsonParsed.get("response");
         jsonParsed = (JSONObject) jsonParsed.get("GeoObjectCollection");
