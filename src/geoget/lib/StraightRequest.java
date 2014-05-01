@@ -18,8 +18,7 @@ public class StraightRequest {
     public StraightRequest(String req) throws IOException {
         String baseFormat = "http://geocode-maps.yandex.ru/1.x/?format=json&geocode=%s";
         request = String.format(Locale.US, baseFormat, req);
-        JSONObject response = getJson();
-        lonlat = getPosition(response);
+        lonlat = getPosition(getJson());
     }
 
     public JSONObject getJson() throws IOException {
@@ -48,17 +47,15 @@ public class StraightRequest {
     }
 
     private static String[] getPosition(JSONObject parsedResponse) {
-        String[] position;
         String pos;
-        JSONArray data;
-        parsedResponse = (JSONObject) parsedResponse.get("response");
-        parsedResponse = (JSONObject) parsedResponse.get("GeoObjectCollection");
-        data = (JSONArray) parsedResponse.get("featureMember");
-        parsedResponse = (JSONObject) data.get(0);
-        parsedResponse = (JSONObject) parsedResponse.get("GeoObject");
-        parsedResponse = (JSONObject) parsedResponse.get("Point");
-        pos = (String) parsedResponse.get("pos");
-        position = pos.split(" ");
-        return position;
+        pos = (String) ((JSONObject) ((JSONObject) ((JSONObject) ((JSONArray) ((JSONObject) ((JSONObject)
+            parsedResponse
+            .get("response"))
+            .get("GeoObjectCollection"))
+            .get("featureMember"))
+            .get(0)).get("GeoObject"))
+            .get("Point"))
+            .get("pos");
+        return pos.split(" ");
     }
 }

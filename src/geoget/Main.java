@@ -16,12 +16,9 @@ public class Main {
         double lat = Double.parseDouble(sr.lonlat[1]);
         GeoObjectCollection collection = new GeoObjectCollection();
         GeoObject center = new GeoObject("Center", lon, lat);
-
         collection.updateElements(lon, lat, spn);
-
-
         for (GeoObject current: collection.objects){
-            System.out.println(String.format("%s\t%04.0fм",current.name,  current.distance(center)));
+            System.out.println(String.format("%s\t%04.0fм", current.name, current.distance(center)));
         }
     }
 }
