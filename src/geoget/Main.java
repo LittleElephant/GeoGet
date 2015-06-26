@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
         double spn = 0.015;
-        String address = "Бульвар матроса железнякак 21";
+        String address = "Бульвар матроса железняка 21";
         StraightRequest sr = new StraightRequest(address);
         double lon = Double.parseDouble(sr.position[0]);
         double lat = Double.parseDouble(sr.position[1]);
