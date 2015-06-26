@@ -6,6 +6,9 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import geoget.lib.yandexapi.YandexGeoApiRequest;
+
+
 public class GeoObjectCollection {
     public ArrayList<GeoObject> objects = new ArrayList<GeoObject>();
 

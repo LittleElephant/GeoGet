@@ -1,10 +1,13 @@
-package geoget.lib;
+package geoget.lib.yandexapi;
 
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import geoget.lib.ApiRequest;
+
 
 public class YandexGeoApiRequest extends ApiRequest {
 
