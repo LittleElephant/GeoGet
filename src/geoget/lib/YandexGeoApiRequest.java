@@ -9,7 +9,7 @@ import java.util.Locale;
 public class YandexGeoApiRequest extends ApiRequest {
 
     public YandexGeoApiRequest(double lon, double lat, double spn) {
-        String baseFormat = "http://geocode-maps.yandex.ru/1.x/?format=json&kind=house&spn=%.4f,%.4f&results=1000&geocode=%.6f,%.6f";
+        String baseFormat = "https://geocode-maps.yandex.ru/1.x/?format=json&kind=house&spn=%.4f,%.4f&results=1000&geocode=%.6f,%.6f";
         request = String.format(Locale.US, baseFormat,spn, spn, lon, lat);
     }
 

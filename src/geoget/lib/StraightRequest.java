@@ -10,7 +10,7 @@ public class StraightRequest extends ApiRequest {
     public String[] position;
 
     public StraightRequest(String req) throws IOException {
-        String baseFormat = "http://geocode-maps.yandex.ru/1.x/?format=json&geocode=%s";
+        String baseFormat = "https://geocode-maps.yandex.ru/1.x/?format=json&geocode=%s";
         request = String.format(Locale.US, baseFormat, req);
         position = getPosition(getJsonFromRequest());
     }
